@@ -4,28 +4,31 @@ import styled from "styled-components";
 
 import { COLORS } from "../../constants";
 import VisuallyHidden from "../VisuallyHidden";
-import { interpolate } from "./ProgressBar.utils";
 
-const SIZES = {
+const STYLES = {
   small: {
-    "--height": 8 + "px",
-    "--radius": 4 + "px",
-    "--padding": 0,
+    height: 8,
+    radius: 4,
+    padding: 0,
   },
   medium: {
-    "--height": 16 + "px",
-    "--radius": 4 + "px",
-    "--padding": 0,
+    height: 12,
+    radius: 4,
+    padding: 0,
   },
   large: {
-    "--height": 24 + "px",
-    "--radius": 8 + "px",
-    "--padding": 4 + "px",
+    height: 16,
+    radius: 8,
+    padding: 4,
   },
 };
 
 const ProgressBar = ({ value, label, size }) => {
-  const styles = SIZES[size];
+  const styles = STYLES[size];
+
+  if (!styles) {
+    throw new Error(`Unknown size passed to ProgressBar: ${size}`);
+  }
 
   return (
     <Wrapper
@@ -33,31 +36,43 @@ const ProgressBar = ({ value, label, size }) => {
       aria-valuenow={value}
       aria-valuemin={0}
       aria-valuemax={100}
-      style={styles}
+      style={{
+        "--padding": styles.padding + "px",
+        "--radius": styles.radius + "px",
+      }}
     >
       <VisuallyHidden>${value}%</VisuallyHidden>
-      <StatusTrack value={value} />
+      <StatusWrapper style={{ "--radius": styles.radius / 2 + "px" }}>
+        <StatusTrack
+          style={{
+            "--width": value + "%",
+            "--height": styles.height + "px",
+            "--radius": styles.radius / 2 + "px",
+          }}
+        />
+      </StatusWrapper>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  background: ${COLORS.transparentGray15};
   border-radius: var(--radius);
   box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
-  height: var(--height);
   padding: var(--padding);
+`;
+
+const StatusWrapper = styled.div`
+  border-radius: var(--radius);
+  /* Trim off corners when track is close to the right edge */
+  overflow: hidden;
 `;
 
 const StatusTrack = styled.div`
   background: ${COLORS.primary};
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-top-right-radius: ${(props) =>
-    interpolate(props.value, 99, 100, 0, 4) + "px"};
-  border-bottom-right-radius: ${(props) =>
-    interpolate(props.value, 99, 100, 0, 4) + "px"};
-  width: clamp(0%, ${(props) => props.value + "%"}, 100%);
-  height: 100%;
+  border-radius: var(--radius) 0 0 var(--radius);
+  width: var(--width);
+  height: var(--height);
 `;
 
 export default ProgressBar;
