@@ -41,7 +41,7 @@ const ProgressBar = ({ value, label, size }) => {
         "--radius": styles.radius + "px",
       }}
     >
-      <VisuallyHidden>${value}%</VisuallyHidden>
+      <VisuallyHidden>{value}%</VisuallyHidden>
       <StatusWrapper style={{ "--radius": styles.radius / 2 + "px" }}>
         <StatusTrack
           style={{
