@@ -36,20 +36,17 @@ const Wrapper = styled.div`
 const HiddenSelect = styled.select`
   position: absolute;
   inset: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: transparent;
+  opacity: 0;
   appearance: none;
 `;
 
 const VisibleSelect = styled.div`
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   border-radius: 8px;
   background: ${COLORS.transparentGray15};
-  padding: 12px 16px;
+  padding: 12px 10px 12px 16px;
   color: ${COLORS.gray700};
 
   ${HiddenSelect}:focus + & {
