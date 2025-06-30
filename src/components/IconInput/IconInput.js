@@ -8,16 +8,16 @@ import VisuallyHidden from "../VisuallyHidden";
 
 const STYLES = {
   small: {
+    height: 24,
     fontSize: 14,
     iconSize: 16,
-    padding: "4px 4px 4px 24px",
-    border: 1,
+    borderThickness: 1,
   },
   large: {
+    height: 32,
     fontSize: 18,
     iconSize: 24,
-    padding: "8px 8px 8px 36px",
-    border: 2,
+    borderThickness: 2,
   },
 };
 
@@ -26,7 +26,7 @@ const IconInput = ({
   icon = "search",
   width = 250,
   size = "small",
-  placeholder,
+  ...delegated
 }) => {
   const styles = STYLES[size];
 
@@ -34,35 +34,42 @@ const IconInput = ({
     <Wrapper
       style={{
         "--width": width + "px",
-        "--padding": styles.padding,
-        "--border": styles.border + "px",
+        "--height": styles.height / 16 + "rem",
+        "--border-thickness": styles.borderThickness + "px",
       }}
     >
       <VisuallyHidden>{label}</VisuallyHidden>
       <IconWrapper style={{ "--size": styles.iconSize + "px" }}>
-        <Icon id={icon} size={styles.iconSize} />
+        <Icon id={icon} size={styles.iconSize} strokeWidth={2} />
       </IconWrapper>
       <Input
-        placeholder={placeholder}
+        {...delegated}
         style={{ "--fontSize": styles.fontSize / 16 + "rem" }}
       />
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.label`
+  display: block;
   position: relative;
   width: var(--width);
+  height: var(--height);
+  color: ${COLORS.gray700};
 
   &::before {
     content: "";
     position: absolute;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    height: var(--border);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--border-thickness);
     background: ${COLORS.gray700};
     border-radius: 16px;
+  }
+
+  &:hover {
+    color: ${COLORS.black};
   }
 `;
 
@@ -70,28 +77,25 @@ const IconWrapper = styled.div`
   position: absolute;
   width: var(--size);
   height: var(--size);
-  left: 3px;
+  left: 0;
   top: 0;
   bottom: 0;
   margin: auto;
-  pointer-events: none;
 `;
 
 const Input = styled.input`
   border: none;
   width: 100%;
-  padding: var(--padding);
+  height: 100%;
+  color: inherit;
   font-size: var(--fontSize);
-  color: ${COLORS.gray700};
   font-weight: 700;
+  padding-left: var(--height);
+  outline-offset: 2px;
 
   &::placeholder {
     color: ${COLORS.gray500};
     font-weight: 400;
-  }
-
-  &:hover {
-    color: ${COLORS.black};
   }
 `;
 
