@@ -31,20 +31,23 @@ const IconInput = ({
   const styles = STYLES[size];
 
   return (
-    <Wrapper
-      style={{
-        "--width": width + "px",
-        "--height": styles.height / 16 + "rem",
-        "--border-thickness": styles.borderThickness + "px",
-      }}
-    >
+    <Wrapper>
       <VisuallyHidden>{label}</VisuallyHidden>
       <IconWrapper style={{ "--size": styles.iconSize + "px" }}>
         <Icon id={icon} size={styles.iconSize} strokeWidth={2} />
       </IconWrapper>
       <Input
         {...delegated}
-        style={{ "--fontSize": styles.fontSize / 16 + "rem" }}
+        style={{
+          "--fontSize": styles.fontSize / 16 + "rem",
+          "--width": width + "px",
+          "--height": styles.height / 16 + "rem",
+        }}
+      />
+      <Border
+        style={{
+          "--border-thickness": styles.borderThickness + "px",
+        }}
       />
     </Wrapper>
   );
@@ -53,20 +56,8 @@ const IconInput = ({
 const Wrapper = styled.label`
   display: block;
   position: relative;
-  width: var(--width);
-  height: var(--height);
   color: ${COLORS.gray700};
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: var(--border-thickness);
-    background: ${COLORS.gray700};
-    border-radius: 16px;
-  }
+  width: fit-content;
 
   &:hover {
     color: ${COLORS.black};
@@ -85,8 +76,8 @@ const IconWrapper = styled.div`
 
 const Input = styled.input`
   border: none;
-  width: 100%;
-  height: 100%;
+  width: var(--width);
+  height: var(--height);
   color: inherit;
   font-size: var(--fontSize);
   font-weight: 700;
@@ -97,6 +88,16 @@ const Input = styled.input`
     color: ${COLORS.gray500};
     font-weight: 400;
   }
+`;
+
+const Border = styled.span`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--border-thickness);
+  background: ${COLORS.gray700};
+  border-radius: 16px;
 `;
 
 export default IconInput;
